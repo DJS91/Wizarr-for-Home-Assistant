@@ -95,12 +95,12 @@ service: wizarr.send_invitation_email
 data:
   recipient_email: "user@example.com"
   server_ids: "1,2"
-  public_url: "https://invites.yourdomain.com"  # Replaces internal IP in links
+  public_url: "https://invites.yourdomain.com"  # Replaces internal IP from invitation link in the email
   smtp_server: "smtp.gmail.com"
   smtp_port: 587
   smtp_username: "your_email@gmail.com"
   smtp_password: "your_app_password"
-  subject: "Welcome to Our Media Server!"       # Custom email subject
+  subject: "Welcome to my Media Server!"        # Custom email subject
   expires_in_days: 7                            # Optional invitation settings
   duration: "unlimited"
   library_ids: "1,2,3"
