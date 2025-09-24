@@ -1,6 +1,6 @@
 # Wizarr for Home Assistant
 
-A comprehensive Home Assistant custom integration for managing Wizarr invitation systems with advanced email capabilities.
+A comprehensive Home Assistant custom integration for monitoring your Wizarr server with invitation emailing capabilities.
 
 ## Features
 
@@ -12,21 +12,16 @@ A comprehensive Home Assistant custom integration for managing Wizarr invitation
 - **Servers Sensor**: Server count and type breakdown
 - **API Keys Sensor**: API key count and status
 
-### 🎯 Services
+### 🎯 Actions
 - **Create Invitation**: Generate new invitation links with comprehensive options
 - **Send Invitation Email**: Create invitation and send beautiful HTML emails with dynamic server information
 
 ### 📧 Email Features
-- **Beautiful HTML Design**: Professional, responsive email templates with modern styling
+- **Responsive HTML Design**: Professional, responsive email templates with modern styling
 - **Dynamic Server Information**: Personalized messages using actual server names and types
 - **Universal Compatibility**: Works perfectly in Outlook, Gmail, Apple Mail, and all email clients
-- **Public URL Replacement**: Automatically replaces internal IPs with public domains
+- **Public URL Replacement**: Option to replaces internal IPs with your public server address
 - **Smart Formatting**: Includes invitation details, expiration info, and access levels
-
-### 🔧 Device Integration
-- **Proper Device Structure**: Creates a parent device for organized entity management
-- **Version Detection**: Automatically detects and displays Wizarr server version
-- **Configuration Links**: Direct links to your Wizarr server from the device page
 
 ## Installation
 
@@ -42,7 +37,7 @@ A comprehensive Home Assistant custom integration for managing Wizarr invitation
 
 ## Configuration
 
-### Required Settings
+### Install config
 - **Base URL**: Your Wizarr server URL (e.g., `http://192.168.1.29:5690`)
 - **API Key**: Your Wizarr API key (get this from Wizarr settings)
 - **Name**: Friendly name for your Wizarr instance (optional)
@@ -69,7 +64,7 @@ sensor.wizarr_users:
 
 ### Services
 
-#### Create Invitation
+#### Create Invitation (no email)
 ```yaml
 service: wizarr.create_invitation
 data:
@@ -82,7 +77,7 @@ data:
   allow_mobile_uploads: false          # Optional: Allow mobile uploads (default: false)
 ```
 
-#### Send Invitation Email (Basic)
+#### Send Invitation Email (Creates and sends with default options)
 ```yaml
 service: wizarr.send_invitation_email
 data:
@@ -94,7 +89,7 @@ data:
   smtp_password: "your_app_password"
 ```
 
-#### Send Invitation Email (Full Featured)
+#### Send Invitation Email (Creates and sends with options)
 ```yaml
 service: wizarr.send_invitation_email
 data:
@@ -116,7 +111,7 @@ data:
 
 ### 📧 Email Features Explained
 
-#### Public URL Replacement
+#### Public URL Replacement when using email action
 The `public_url` parameter automatically transforms internal invitation URLs:
 - **Without public_url**: `http://192.168.1.29:5690/j/ABC123`
 - **With public_url**: `https://invites.yourdomain.com/j/ABC123`
@@ -162,16 +157,6 @@ automation:
           allow_downloads: true
 ```
 
-## 🏗️ Device Structure
-
-The integration creates a proper device hierarchy:
-- **Parent Device**: "Wizarr Server" (or your custom name)
-  - Manufacturer: Wizarr
-  - Model: Invitation Manager  
-  - Software Version: Auto-detected from API
-  - Configuration URL: Links to your Wizarr server
-- **Child Entities**: All 6 sensors grouped under the device
-
 ## 📡 API Coverage
 
 This integration covers all major Wizarr API endpoints:
@@ -184,11 +169,6 @@ This integration covers all major Wizarr API endpoints:
 - **POST /invitations** - Create new invitations
 
 ## 🔧 Advanced Configuration
-
-### SMTP Settings
-- **Gmail**: Use App Passwords (not your regular password)
-- **Outlook**: Use App Passwords or OAuth if available
-- **Custom SMTP**: Any SMTP server with authentication
 
 ### Server IDs
 Find your server IDs in the Wizarr admin panel or check the `wizarr_servers` sensor attributes.
