@@ -1,4 +1,4 @@
-# Wizarr for Home Assistant
+# <img src="logo.png" width="35" height="35"> Wizarr for Home Assistant
 
 A comprehensive Home Assistant custom integration for monitoring your Wizarr server with invitation emailing capabilities.
 
