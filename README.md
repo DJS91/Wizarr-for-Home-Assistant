@@ -30,6 +30,10 @@ A comprehensive Home Assistant custom integration for managing Wizarr invitation
 
 ## Installation
 
+### HACS (Recommended)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=DJS91&repository=Wizarr&category=Integration)
+
+### Manual
 1. Copy the `wizarr` folder to your Home Assistant `custom_components` directory
 2. Restart Home Assistant
 3. Go to **Settings** > **Devices & Services**
