@@ -1,0 +1,12 @@
+{
+  "domain": "wizarr",
+  "name": "Wizarr",
+  "version": "1.0.0",
+  "documentation": "https://github.com/DJS91/wizarr",
+  "issue_tracker": "https://github.com/DJS91/wizarr/issues",
+  "dependencies": [],
+  "codeowners": ["@DJS91"],
+  "requirements": ["aiohttp>=3.8.0"],
+  "config_flow": true,
+  "iot_class": "cloud_polling"
+}

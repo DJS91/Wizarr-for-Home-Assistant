@@ -1,0 +1,106 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "name": "Name",
+          "base_url": "Base URL",
+          "api_key": "API Key",
+          "update_interval": "Update Interval (seconds)"
+        },
+        "description": "Enter your Wizarr server details",
+        "title": "Wizarr"
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "Invalid authentication",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "Service is already configured"
+    }
+  },
+  "services": {
+    "create_invitation": {
+      "name": "Create Invitation",
+      "description": "Create a new invitation link",
+      "fields": {
+        "expires": {
+          "name": "Expires",
+          "description": "When the invitation expires (ISO 8601 format)"
+        },
+        "sessions": {
+          "name": "Sessions",
+          "description": "Number of sessions allowed"
+        },
+        "live_tv": {
+          "name": "Live TV",
+          "description": "Allow live TV access"
+        },
+        "downloads": {
+          "name": "Downloads", 
+          "description": "Allow downloads"
+        },
+        "library_access": {
+          "name": "Library Access",
+          "description": "List of library IDs to grant access to"
+        }
+      }
+    },
+    "send_invitation_email": {
+      "name": "Send Invitation Email",
+      "description": "Create an invitation and send it via email",
+      "fields": {
+        "recipient_email": {
+          "name": "Recipient Email",
+          "description": "Email address to send the invitation to"
+        },
+        "smtp_server": {
+          "name": "SMTP Server",
+          "description": "SMTP server hostname"
+        },
+        "smtp_port": {
+          "name": "SMTP Port", 
+          "description": "SMTP server port"
+        },
+        "smtp_username": {
+          "name": "SMTP Username",
+          "description": "SMTP authentication username"
+        },
+        "smtp_password": {
+          "name": "SMTP Password",
+          "description": "SMTP authentication password"
+        },
+        "use_tls": {
+          "name": "Use TLS",
+          "description": "Use TLS encryption"
+        },
+        "subject": {
+          "name": "Subject",
+          "description": "Email subject line"
+        },
+        "expires": {
+          "name": "Expires",
+          "description": "When the invitation expires (ISO 8601 format)"
+        },
+        "sessions": {
+          "name": "Sessions",
+          "description": "Number of sessions allowed"
+        },
+        "live_tv": {
+          "name": "Live TV",
+          "description": "Allow live TV access"
+        },
+        "downloads": {
+          "name": "Downloads",
+          "description": "Allow downloads"
+        },
+        "library_access": {
+          "name": "Library Access", 
+          "description": "List of library IDs to grant access to"
+        }
+      }
+    }
+  }
+}

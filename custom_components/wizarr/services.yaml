@@ -1,0 +1,167 @@
+create_invitation:
+  name: Create Invitation
+  description: Create a new invitation link
+  fields:
+    server_ids:
+      name: Server IDs
+      description: Comma-separated list of server IDs (e.g. 1,2,3)
+      required: true
+      example: "1"
+      selector:
+        text:
+    expires_in_days:
+      name: Expires In Days
+      description: Days until invitation expires (1, 7, 30, or leave empty for no expiration)
+      required: false
+      example: 7
+      selector:
+        number:
+          min: 1
+          max: 365
+          mode: box
+    duration:
+      name: Duration
+      description: User access duration in days or "unlimited" (leave empty for unlimited)
+      required: false
+      example: "30"
+      selector:
+        text:
+    library_ids:
+      name: Library IDs
+      description: Comma-separated list of library IDs to grant access to (leave empty for all libraries)
+      required: false
+      example: "1,2,3"
+      selector:
+        text:
+    allow_downloads:
+      name: Allow Downloads
+      description: Allow user downloads
+      required: false
+      default: false
+      selector:
+        boolean:
+    allow_live_tv:
+      name: Allow Live TV
+      description: Allow live TV access
+      required: false
+      default: false
+      selector:
+        boolean:
+    allow_mobile_uploads:
+      name: Allow Mobile Uploads
+      description: Allow mobile uploads
+      required: false
+      default: false
+      selector:
+        boolean:
+
+send_invitation_email:
+  name: Send Invitation Email
+  description: Create an invitation and send it via email
+  fields:
+    recipient_email:
+      name: Recipient Email
+      description: Email address to send the invitation to
+      required: true
+      example: "user@example.com"
+      selector:
+        text:
+    server_ids:
+      name: Server IDs
+      description: Comma-separated list of server IDs (e.g. 1,2,3)
+      required: true
+      example: "1"
+      selector:
+        text:
+    public_url:
+      name: Public Access URL
+      description: Public URL to replace internal address (e.g. https://invites.yourdomain.com)
+      required: false
+      example: "https://invites.yourdomain.com"
+      selector:
+        text:
+    smtp_server:
+      name: SMTP Server
+      description: SMTP server hostname (e.g. smtp.gmail.com)
+      required: true
+      example: "smtp.gmail.com"
+      selector:
+        text:
+    smtp_port:
+      name: SMTP Port
+      description: SMTP server port (usually 587 for TLS or 465 for SSL)
+      required: true
+      default: 587
+      example: 587
+      selector:
+        number:
+          min: 1
+          max: 65535
+          mode: box
+    smtp_username:
+      name: SMTP Username
+      description: SMTP authentication username (usually your email address)
+      required: true
+      example: "your_email@gmail.com"
+      selector:
+        text:
+    smtp_password:
+      name: SMTP Password
+      description: SMTP authentication password (use app password for Gmail)
+      required: true
+      selector:
+        text:
+          type: password
+    subject:
+      name: Subject
+      description: Email subject line
+      required: false
+      default: "Your Wizarr Invitation"
+      example: "Welcome to our Media Server!"
+      selector:
+        text:
+    expires_in_days:
+      name: Expires In Days
+      description: Days until invitation expires (1, 7, 30, or leave empty for no expiration)
+      required: false
+      example: 7
+      selector:
+        number:
+          min: 1
+          max: 365
+          mode: box
+    duration:
+      name: Duration
+      description: User access duration in days or "unlimited" (leave empty for unlimited)
+      required: false
+      example: "30"
+      selector:
+        text:
+    library_ids:
+      name: Library IDs
+      description: Comma-separated list of library IDs to grant access to (leave empty for all libraries)
+      required: false
+      example: "1,2,3"
+      selector:
+        text:
+    allow_downloads:
+      name: Allow Downloads
+      description: Allow user downloads
+      required: false
+      default: false
+      selector:
+        boolean:
+    allow_live_tv:
+      name: Allow Live TV
+      description: Allow live TV access
+      required: false
+      default: false
+      selector:
+        boolean:
+    allow_mobile_uploads:
+      name: Allow Mobile Uploads
+      description: Allow mobile uploads
+      required: false
+      default: false
+      selector:
+        boolean:
