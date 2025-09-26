@@ -1,8 +1,8 @@
 # <img src="logo.png" width="35" height="35"> Wizarr for Home Assistant
 
-A comprehensive Home Assistant custom integration for monitoring your [Wizarr](https://github.com/wizarrrr/wizarr) server with invitation emailing capabilities.
+A featured Home Assistant custom integration for monitoring your Wizarr server with invitation emailing capabilities.
 
-Wizarr is an automatic user invitation and management system for Plex, Jellyfin, Emby, Audiobookshelf, Romm, Komga and Kavita.
+<a href="https://github.com/wizarrrr/wizarr" target="_blank">Wizarr</a> is an automatic user invitation and management system for Plex, Jellyfin, Emby, Audiobookshelf, Romm, Komga and Kavita.
 
 ## Features
 
