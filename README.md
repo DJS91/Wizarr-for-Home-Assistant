@@ -22,6 +22,7 @@ A comprehensive Home Assistant custom integration for monitoring your Wizarr ser
 - **Universal Compatibility**: Works perfectly in Outlook, Gmail, Apple Mail, and all email clients
 - **Public URL Replacement**: Option to replaces internal IPs with your public server address
 - **Smart Formatting**: Includes invitation details, expiration info, and access levels
+<img src="/assets/email_screen.png">
 
 ## Installation
 
