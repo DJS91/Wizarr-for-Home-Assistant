@@ -10,7 +10,7 @@ A featured Home Assistant custom integration for monitoring your Wizarr server w
 - **Status Sensor**: Overall system status and statistics via attributes
 - **Users Sensor**: User count and details breakdown by server type via attributes
 - **Invitations Sensor**: Invitation count and invitation details via attributes
-- **Libraries Sensor**: Library count and server distribution detaisl via attributes
+- **Libraries Sensor**: Library count and server distribution details via attributes
 - **Servers Sensor**: Server count and type breakdown details via attributes
 - **API Keys Sensor**: API key count and status details via attributes
 
