@@ -63,6 +63,169 @@ class WizarrSensor(CoordinatorEntity, SensorEntity):
             configuration_url=base_url,
         )
 
+    def _enrich_invitations_with_user_emails(self, invitations_data):
+        """Replace user IDs in invitations with user email addresses and library IDs with library names."""
+        if not invitations_data or not self.coordinator.data:
+            return invitations_data
+        
+        # Get users data from coordinator
+        users_data = self.coordinator.data.get("users")
+        
+        # Build user lookup map (user_id -> email)
+        user_lookup = {}
+        if users_data:
+            users_list = []
+            
+            # Handle different response structures
+            if isinstance(users_data, dict):
+                # Check for "data" field (common API pattern)
+                if "data" in users_data:
+                    users_list = users_data.get("data", [])
+                # Check for "users" field
+                elif "users" in users_data:
+                    users_list = users_data.get("users", [])
+                # If dict has list items mixed with other fields, extract the list
+                else:
+                    for key, value in users_data.items():
+                        if isinstance(value, list) and key != "count":
+                            users_list = value
+                            break
+            elif isinstance(users_data, list):
+                users_list = users_data
+            
+            for user in users_list:
+                if isinstance(user, dict):
+                    user_id = user.get("id")
+                    email = user.get("email")
+                    username = user.get("username")
+                    # Create a display string with both username and email if available
+                    if email and username:
+                        display_name = f"{username} ({email})"
+                    elif email:
+                        display_name = email
+                    elif username:
+                        display_name = username
+                    else:
+                        display_name = f"User {user_id}"
+                    
+                    if user_id:
+                        user_lookup[user_id] = display_name
+        
+        # Get libraries data from coordinator
+        libraries_data = self.coordinator.data.get("libraries")
+        
+        # Build library lookup map (library_id -> library_name)
+        library_lookup = {}
+        if libraries_data:
+            libraries_list = []
+            
+            # Handle different response structures
+            if isinstance(libraries_data, dict):
+                # Check for "data" field
+                if "data" in libraries_data:
+                    libraries_list = libraries_data.get("data", [])
+                # Check for "libraries" field
+                elif "libraries" in libraries_data:
+                    libraries_list = libraries_data.get("libraries", [])
+                # If dict has list items mixed with other fields, extract the list
+                else:
+                    for key, value in libraries_data.items():
+                        if isinstance(value, list) and key != "count":
+                            libraries_list = value
+                            break
+            elif isinstance(libraries_data, list):
+                libraries_list = libraries_data
+            
+            for library in libraries_list:
+                if isinstance(library, dict):
+                    library_id = library.get("id")
+                    library_name = library.get("name", library.get("title", f"Library {library_id}"))
+                    server_name = library.get("server_name", "")
+                    
+                    # Include server name if available for clarity (since you have duplicate library names)
+                    if server_name and server_name != "Unknown":
+                        display_name = f"{library_name} ({server_name})"
+                    else:
+                        display_name = library_name
+                    
+                    if library_id:
+                        library_lookup[library_id] = display_name
+        
+        # Process invitations data
+        import copy
+        enriched_data = copy.deepcopy(invitations_data)
+        
+        invitations_list = []
+        
+        # Handle different response structures
+        if isinstance(enriched_data, dict):
+            # Check for "data" field (common API pattern)
+            if "data" in enriched_data:
+                invitations_list = enriched_data.get("data", [])
+            # Check for "invitations" field
+            elif "invitations" in enriched_data:
+                invitations_list = enriched_data.get("invitations", [])
+            # If dict has list items mixed with other fields, extract the list
+            else:
+                for key, value in enriched_data.items():
+                    if isinstance(value, list) and key != "count":
+                        invitations_list = value
+                        break
+        elif isinstance(enriched_data, list):
+            invitations_list = enriched_data
+        
+        # Replace used_by user ID with email and specific_libraries IDs with names
+        for invitation in invitations_list:
+            if isinstance(invitation, dict):
+                # Handle used_by field - it might be a string like "<User 2>", an int, or a dict
+                if "used_by" in invitation:
+                    used_by = invitation["used_by"]
+                    
+                    # Check if it's a string like "<User 2>"
+                    if isinstance(used_by, str) and used_by.startswith("<User ") and used_by.endswith(">"):
+                        # Extract the user ID from "<User 2>"
+                        try:
+                            user_id = int(used_by.replace("<User ", "").replace(">", "").strip())
+                            if user_id in user_lookup:
+                                invitation["used_by"] = user_lookup[user_id]
+                        except (ValueError, AttributeError):
+                            pass  # Keep original value if parsing fails
+                    
+                    # If it's a dict with id field
+                    elif used_by and isinstance(used_by, dict):
+                        user_id = used_by.get("id")
+                        if user_id and user_id in user_lookup:
+                            invitation["used_by"] = user_lookup[user_id]
+                    
+                    # If it's just an ID number
+                    elif isinstance(used_by, int):
+                        if used_by in user_lookup:
+                            invitation["used_by"] = user_lookup[used_by]
+                
+                # Handle specific_libraries field
+                if "specific_libraries" in invitation:
+                    specific_libs = invitation["specific_libraries"]
+                    if isinstance(specific_libs, list) and specific_libs:
+                        # Replace library IDs with names
+                        library_names = []
+                        for lib_id in specific_libs:
+                            if isinstance(lib_id, int) and lib_id in library_lookup:
+                                library_names.append(library_lookup[lib_id])
+                            elif isinstance(lib_id, dict) and "id" in lib_id:
+                                # If it's already an object with id
+                                lookup_id = lib_id.get("id")
+                                if lookup_id in library_lookup:
+                                    library_names.append(library_lookup[lookup_id])
+                                else:
+                                    library_names.append(lib_id.get("name", f"Library {lookup_id}"))
+                            else:
+                                library_names.append(str(lib_id))
+                        
+                        invitation["specific_libraries"] = library_names
+        
+        # Return just the enriched invitations list
+        return invitations_list
+
     @property
     def native_value(self) -> Optional[str]:
         """Return the state of the sensor."""
@@ -104,8 +267,14 @@ class WizarrSensor(CoordinatorEntity, SensorEntity):
         if data is None:
             return {"status": "unavailable"}
 
-        # Return the full data as attributes
-        attributes = {"raw_data": data}
+        # Return the full data as attributes with sensor-type-specific key
+        if self.sensor_type == "invitations":
+            # Enrich invitations data with user emails and library names
+            # This returns a list of enriched invitations
+            enriched_invitations = self._enrich_invitations_with_user_emails(data)
+            attributes = {"invitations": enriched_invitations}
+        else:
+            attributes = {"raw_data": data}
         
         # Add specific attributes based on sensor type
         if self.sensor_type == "status" and isinstance(data, dict):
