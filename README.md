@@ -27,6 +27,12 @@ A featured Home Assistant custom integration for monitoring your Wizarr server w
 
 
 ## Screenshots
+
+### Home Assistant Custom Dashboard Card
+Using the InvitationsTableCard.yaml
+
+<img src="/assets/DashboardCardWizarr.png" style="max-width: 600px;" />
+
 ### Home Assistant Action - Generate invitation email
 <img src="/assets/action.png" style="max-width: 600px;" />
 
