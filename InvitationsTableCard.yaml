@@ -1,0 +1,137 @@
+type: custom:html-template-card
+  title: ""
+  ignore_line_breaks: true
+  grid_options:
+    columns: 31
+    rows: auto
+  content: |
+    <div>
+      <style>
+        @media (max-width: 600px) {
+          .table-responsive { border: 0; }
+          .table-responsive thead { display: none; }
+          .table-responsive tr {
+            display: block;
+            margin-bottom: 20px;
+            border: 1px solid var(--divider-color, #333);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--card-background-color, #1c1c1c);
+          }
+          .table-responsive td {
+            display: block;
+            text-align: left !important;
+            padding: 12px 16px !important;
+            border-bottom: 1px solid var(--divider-color, #333);
+            position: relative;
+            padding-left: 50% !important;
+          }
+          .table-responsive td:last-child {
+            border-bottom: 0;
+          }
+          .table-responsive td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            font-weight: 500;
+            color: var(--primary-text-color, #fff);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .status-text { display: inline-block !important; }
+          .status-dot { display: none !important; }
+        }
+        @media (min-width: 601px) {
+          .status-text { display: inline-block !important; }
+          .status-dot { display: none !important; }
+          .status-header { text-align: left !important; }
+          .status-cell { text-align: left !important; }
+        }
+      </style>
+      <table class="table-responsive" style="width: 100%; border-collapse: collapse; font-family: 'Roboto', sans-serif; font-size: 14px; background: var(--card-background-color, #1c1c1c); border-radius: 8px; overflow: hidden; border: 1px solid var(--divider-color, #333); table-layout: fixed;">
+        <thead>
+          <tr>
+            <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--divider-color, #333); background: var(--primary-background-color, #111); color: var(--primary-text-color, #fff); font-weight: 500; font-size: 13px; width: 80px;">Invite Code</th>
+            <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--divider-color, #333); background: var(--primary-background-color, #111); color: var(--primary-text-color, #fff); font-weight: 500; font-size: 13px; width: 200px;">Sent to</th>
+            <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--divider-color, #333); background: var(--primary-background-color, #111); color: var(--primary-text-color, #fff); font-weight: 500; font-size: 13px; width: 200px;">Used By</th>
+            <th class="status-header" style="padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--divider-color, #333); background: var(--primary-background-color, #111); color: var(--primary-text-color, #fff); font-weight: 500; font-size: 13px; width: 60px;">Status</th>
+            <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--divider-color, #333); background: var(--primary-background-color, #111); color: var(--primary-text-color, #fff); font-weight: 500; font-size: 13px; width: 60px;">Created</th>
+            <th style="padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--divider-color, #333); background: var(--primary-background-color, #111); color: var(--primary-text-color, #fff); font-weight: 500; font-size: 13px; width: 60px;">Used</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set invites_raw = state_attr('sensor.wizarr_invitations', 'invitations') %}
+          {% if invites_raw %}
+            {# Check if it's an array or single object #}
+            {% if invites_raw is iterable and invites_raw is not string and invites_raw is not mapping %}
+              {# It's an array - loop through each invite #}
+              {% for invite in invites_raw %}
+              <tr style="border-bottom: 1px solid var(--divider-color, #333);">
+                <td data-label="Invite Code" style="padding: 12px 16px; text-align: left; color: var(--primary-text-color, #fff); word-wrap: break-word; overflow: hidden;">
+                  <span style="font-family: 'Roboto Mono', monospace; background: var(--secondary-background-color, #2c2c2c); color: var(--accent-color, #03dac6); padding: 4px 8px; border-radius: 4px; font-size: 12px; display: inline-block; border: 1px solid var(--divider-color, #333); word-break: break-all;">{{ invite.code | default('N/A') }}</span>
+                </td>
+                <td data-label="Sent to" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); word-wrap: break-word; overflow: hidden; font-style: {% if not invite.notes %}italic{% else %}normal{% endif %};">
+                  {{ invite.notes | default('No notes') }}
+                </td>
+                <td data-label="Used By" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); word-wrap: break-word; overflow: hidden; text-overflow: ellipsis;">{{ invite.used_by | default('Not used') }}</td>
+                <td data-label="Status" class="status-cell" style="padding: 12px 16px; text-align: left;">
+                  <span class="status-text" style="background: {% if invite.status == 'used' %}var(--success-color, #4caf50){% else %}var(--warning-color, #ff9800){% endif %}; color: white; padding: 4px 12px; border-radius: 16px; font-size: 11px; font-weight: 500; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;">{{ invite.status | default('pending') }}</span>
+                  <span class="status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: {% if invite.status == 'used' %}var(--success-color, #4caf50){% else %}var(--warning-color, #ff9800){% endif %}; display: none;" title="{{ invite.status | default('pending') }}"></span>
+                </td>
+                <td data-label="Created" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); font-size: 13px; word-wrap: break-word;">
+                  {% if invite.created %}
+                    {{ relative_time(strptime(invite.created, '%Y-%m-%dT%H:%M:%S.%f')) }}
+                  {% else %}
+                    <span style="color: var(--disabled-text-color, #666);">Never</span>
+                  {% endif %}
+                </td>
+                <td data-label="Used" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); font-size: 13px; word-wrap: break-word;">
+                  {% if invite.used_at and invite.used_at != 'null' and invite.used_at != None %}
+                    {{ relative_time(strptime(invite.used_at, '%Y-%m-%dT%H:%M:%S.%f')) }}
+                  {% else %}
+                    <span style="color: var(--disabled-text-color, #666);">Never</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              {# It's a single object - treat as one invite #}
+              {% set invite = invites_raw %}
+              <tr style="border-bottom: 1px solid var(--divider-color, #333);">
+                <td data-label="Invite Code" style="padding: 12px 16px; text-align: left; color: var(--primary-text-color, #fff); word-wrap: break-word; overflow: hidden;">
+                  <span style="font-family: 'Roboto Mono', monospace; background: var(--secondary-background-color, #2c2c2c); color: var(--accent-color, #03dac6); padding: 4px 8px; border-radius: 4px; font-size: 12px; display: inline-block; border: 1px solid var(--divider-color, #333); word-break: break-all;">{{ invite.code | default('N/A') }}</span>
+                </td>
+                <td data-label="Sent to" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); word-wrap: break-word; overflow: hidden; font-style: {% if not invite.notes %}italic{% else %}normal{% endif %};">
+                  {{ invite.notes | default('No notes') }}
+                </td>
+                <td data-label="Used By" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); word-wrap: break-word; overflow: hidden; text-overflow: ellipsis;">{{ invite.used_by | default('Not used') }}</td>
+                <td data-label="Status" class="status-cell" style="padding: 12px 16px; text-align: left;">
+                  <span class="status-text" style="background: {% if invite.status == 'used' %}var(--success-color, #4caf50){% else %}var(--warning-color, #ff9800){% endif %}; color: white; padding: 4px 12px; border-radius: 16px; font-size: 11px; font-weight: 500; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;">{{ invite.status | default('pending') }}</span>
+                  <span class="status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: {% if invite.status == 'used' %}var(--success-color, #4caf50){% else %}var(--warning-color, #ff9800){% endif %}; display: none;" title="{{ invite.status | default('pending') }}"></span>
+                </td>
+                <td data-label="Created" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); font-size: 13px; word-wrap: break-word;">
+                  {% if invite.created %}
+                    {{ relative_time(strptime(invite.created, '%Y-%m-%dT%H:%M:%S.%f')) }}
+                  {% else %}
+                    <span style="color: var(--disabled-text-color, #666);">Never</span>
+                  {% endif %}
+                </td>
+                <td data-label="Used" style="padding: 12px 16px; text-align: left; color: var(--secondary-text-color, #ccc); font-size: 13px; word-wrap: break-word;">
+                  {% if invite.used_at and invite.used_at != 'null' and invite.used_at != None %}
+                    {{ relative_time(strptime(invite.used_at, '%Y-%m-%dT%H:%M:%S.%f')) }}
+                  {% else %}
+                    <span style="color: var(--disabled-text-color, #666);">Never</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endif %}
+          {% else %}
+          <tr>
+            <td colspan="6" style="padding: 20px; text-align: center; color: var(--secondary-text-color, #ccc); font-style: italic;">No invites available</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
