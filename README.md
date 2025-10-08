@@ -29,7 +29,7 @@ A featured Home Assistant custom integration for monitoring your Wizarr server w
 ## Screenshots
 
 ### Home Assistant Custom Dashboard Card
-Using the InvitationsTableCard.yaml
+Using the InvitationsTableCard.yaml (requires HACS card [HTML Jinja2 Template card](https://github.com/PiotrMachowski/Home-Assistant-Lovelace-HTML-Jinja2-Template-card))
 
 <img src="/assets/DashboardCardWizarr.png" style="max-width: 600px;" />
 
